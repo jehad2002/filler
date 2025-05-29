@@ -1,4 +1,4 @@
-use crate::grid::{Grid, read_grid};
+use crate::grid::read_grid;
 use crate::piece::Piece;
 use crate::utils::*;
 use std::io::{self, BufRead};
@@ -6,7 +6,7 @@ use std::io::{self, BufRead};
 pub fn run_game() {
     let stdin = io::stdin();
     let mut input = String::new();
-    
+
     if stdin.lock().read_line(&mut input).is_err() {
         eprintln!("Failed to read input");
         return;

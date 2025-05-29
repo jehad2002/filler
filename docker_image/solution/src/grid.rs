@@ -4,8 +4,6 @@ use thiserror::Error;
 #[derive(Debug)]
 pub struct Grid {
     pub cells: Vec<Vec<char>>,
-    pub pcoords: Vec<(usize, usize)>,
-    pub ecoords: Vec<(usize, usize)>,
 }
 
 #[derive(Debug, Error)]
@@ -18,15 +16,9 @@ pub enum GridError {
 
 impl Grid {
     pub fn is_inside(&self, x: usize, y: usize) -> bool {
-        if let Some(row) = self.cells.get(y) {
-            if let Some(_) = row.get(x) {
-                return true;
-            }
-        }
-        false
+        self.cells.get(y).and_then(|row| row.get(x)).is_some()
     }
 }
-
 
 pub fn read_grid(
     input: &mut String,
@@ -45,18 +37,18 @@ pub fn read_grid(
 
     let mut grid = Vec::new();
 
-    for i in 0..grid_lines + 1 {
+    for i in 0..=grid_lines {
         input.clear();
         stdin.lock().read_line(input).map_err(|_| GridError::ReadError)?;
         if i < 1 {
             continue;
         } else {
             let row: Vec<char> = input[4..input.len() - 1].chars().collect();
-            for j in 0..row.len() {
-                if pchars.contains(&row[j]) {
+            for (j, &ch) in row.iter().enumerate() {
+                if pchars.contains(&ch) {
                     pcoords.push((j, i));
                 }
-                if echars.contains(&row[j]) {
+                if echars.contains(&ch) {
                     ecoords.push((j, i));
                 }
             }
@@ -64,5 +56,5 @@ pub fn read_grid(
         }
     }
 
-    Ok((Grid { cells: grid, pcoords: pcoords.clone(), ecoords: ecoords.clone() }, pcoords, ecoords))
+    Ok((Grid { cells: grid }, pcoords, ecoords))
 }
