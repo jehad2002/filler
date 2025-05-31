@@ -3,7 +3,7 @@ use thiserror::Error;
 
 #[derive(Debug)]
 pub struct Piece {
-    pub cells: Vec<Vec<char>>,
+    pub cells: Vec<Vec<char>>, 
 }
 
 #[derive(Debug, Error)]
@@ -21,7 +21,7 @@ impl Piece {
 
         input.clear();
         stdin.lock().read_line(input).map_err(|_| PieceError::ReadError)?;
-        let piece_details = input.split_whitespace().collect::<Vec<&str>>();
+        let piece_details = input.split_whitespace().collect::<Vec<&str>>(); // split the input by whitespace and collect it into a vector
         let lines = piece_details[2];
         let piece_lines = lines[..lines.len() - 1].parse::<i32>().map_err(|_| PieceError::ParseError)?;
 
